@@ -1,0 +1,64 @@
+﻿@model ICollection<CVtheque.Web.Models.LangueVM>
+
+@{
+    ViewBag.Title = "Langues";
+    Layout = null;
+}
+
+<br />
+
+<div class="row grid-striped bg-primary">
+
+    <div class="col-4">
+        Label
+    </div>
+    <div class="col-4">
+        Niveau
+    </div>
+    <div class="col-4">
+
+    </div>
+</div>
+
+<form action="/Donnees/DeleteLangue" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#AffichageLangues" id="form6" method="post" novalidate="novalidate">
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+
+    <div class="row grid-striped">
+
+        <div class="col-4">
+            <input type="hidden" name="langues[@i].Id" value="@Model.ElementAt(i).Id" />
+            <input type="hidden" id="tobedel_@i" name="langues[@i].ToBeDeleted" value="false" />
+            @Model.ElementAt(i).Label
+        </div>
+
+        <div class="col-4">
+            @Model.ElementAt(i).Niveau
+        </div>
+
+        <div class="col-4">
+            <button type="button" class="btn btn-light">
+                <span style="font-size: 1em; color: green;">
+                    <i class="fas fa-edit" data-internalid="@Model.ElementAt(i).Id"></i>
+                </span>
+            </button>
+            <button type="button" class="btn btn-light">
+                <span style="font-size: 1em; color: red;">
+                    <i class="fas fa-trash-alt" data-internalid="@i"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    }
+
+    <br />
+
+    <button type="button" class="btn btn-light">
+        <span style="font-size: 1.2em; color: green;">
+            <i class="fas fa-plus-square"></i>
+        </span>
+    </button>
+
+</form>

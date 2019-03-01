@@ -1,0 +1,49 @@
+﻿@model CVtheque.Web.Models.LangueVM
+
+@{
+    //ViewBag.Title = "AddOrEditFormation";
+    Layout = null;
+}
+
+
+<form action="/Donnees/AddOrEditLangue" data-ajax="true" data-ajax-mode="replace" data-ajax-success="ResetForm7(this);" data-ajax-update="#AffichageLangues" id="form7" method="post" novalidate="novalidate">
+
+    @Html.AntiForgeryToken()
+
+    <span class="action">@Model.FormTitre</span>
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" }) 
+
+        <input type="hidden" id="HiddenInput" name="Id" value="@Model.Id" />
+        <input type="hidden" name="FormAction" value="@Model.FormAction" />
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Ecole">Label</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Label, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Label, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Description">Niveau</label>
+            <div class="col-md-10">
+                @Html.RadioButtonFor(model => model.Niveau, "Debutant")
+                @Html.RadioButtonFor(model => model.Niveau, "Intermediaire")
+                @Html.RadioButtonFor(model => model.Niveau, "Courant")
+                @Html.RadioButtonFor(model => model.Niveau, "Natif")
+                @*@Html.ValidationMessageFor(model => model.Niveau, "", new { @class = "text-danger" })*@
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Valider" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+
+</form>

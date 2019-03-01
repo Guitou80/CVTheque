@@ -1,0 +1,29 @@
+﻿@model CVtheque.Web.Models.PersonneVM
+
+@{
+    ViewBag.Title = "Verification de compte";
+}
+
+<h2>Verification de compte</h2>
+
+
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+
+        <div class="alert alert-success">
+            Votre compte a ete active avec succes. Cliquez ici pour vous loguer : @Html.ActionLink("Connexion", "Se Loguer", "User/Connexion");
+        </div>
+}
+else
+{
+
+        <div class="alert alert-danger">
+           <strong>Erreur !</strong> @ViewBag.Message
+        </div>
+}
+
+   
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

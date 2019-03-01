@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVtheque.Entities", "CVtheque.Entities\CVtheque.Entities.csproj", "{1EC48996-1B42-4E76-AA0D-DC154D56861A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVtheque.Data", "CVtheque.Data\CVtheque.Data.csproj", "{032DC28D-BAED-4890-88C6-914AFF36F4AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVtheque.Web", "CVtheque.Web\CVtheque.Web.csproj", "{CA8A96F5-3C16-4F17-943E-E82D5A79A969}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1EC48996-1B42-4E76-AA0D-DC154D56861A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EC48996-1B42-4E76-AA0D-DC154D56861A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EC48996-1B42-4E76-AA0D-DC154D56861A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EC48996-1B42-4E76-AA0D-DC154D56861A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{032DC28D-BAED-4890-88C6-914AFF36F4AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032DC28D-BAED-4890-88C6-914AFF36F4AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032DC28D-BAED-4890-88C6-914AFF36F4AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032DC28D-BAED-4890-88C6-914AFF36F4AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA8A96F5-3C16-4F17-943E-E82D5A79A969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA8A96F5-3C16-4F17-943E-E82D5A79A969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA8A96F5-3C16-4F17-943E-E82D5A79A969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA8A96F5-3C16-4F17-943E-E82D5A79A969}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

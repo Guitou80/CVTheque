@@ -1,0 +1,214 @@
+﻿@model CVtheque.Web.Models.PersonneVM
+
+@{
+    ViewBag.Title = "Enregistrement";
+}
+
+<h2>Enregistrement</h2>
+
+@if (ViewBag.Status != null && Convert.ToBoolean(ViewBag.Status))
+{
+
+    if (ViewBag.Message != null)
+    {
+        <div class="alert alert-success">
+            <strong>Success ! </strong> @ViewBag.Message
+        </div>
+    }
+
+}
+else
+{
+    using (Html.BeginForm("Enregistrement", "User", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group">
+
+                        <label class="control-label col-md-12" for="Prenom"> Prenom</label>
+
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Prenom, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Prenom, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="Nom"> Nom</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Nom, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Nom, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="DateDeNaissance">Date de naissance</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.DateDeNaissance, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.DateDeNaissance, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="Email"> Email</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            @Html.ValidationMessage("EmailExist", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="NumeroTel">Numero de telephone</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.NumeroTel, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.NumeroTel, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="Permis"> Permis</label>
+                        <div class="col-md-10">
+                            <div class="checkbox">
+                                @Html.EditorFor(model => model.Permis)
+                                @Html.ValidationMessageFor(model => model.Permis, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="Adresse"> Adresse</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Adresse, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Adresse, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="CodePostal">Code Postal</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CodePostal, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.CodePostal, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="Commune">Commune</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Commune, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Commune, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="Password">Mot de Passe</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="ConfirmPassword">Confirmer mot de passe</label>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Valider" class="btn btn-default" />
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-6">
+
+                    <div class="form-group">
+                        <label class="control-label col-md-12" for="FichierPhoto">Image</label>
+                        <div class="col-md-10">
+
+                            <input type="hidden" value="0" name="CropX" id="X"/>
+                            <input type="hidden" value="0" name="CropY" id="Y" />
+                            <input type="hidden" value="0" name="CropW" id="W" />
+                            <input type="hidden" value="0" name="CropH" id="H" />
+
+                            <img src="" id="cropbox" />
+
+                            <input type="file" name="FichierPhoto" id="inputimage" />
+                            <br/> Si vous délimitez une zône rectangulaire sur l'image, celle-ci sera recadrée lors de la validation du formulaire
+
+                        </div>
+                    </div>
+
+                    @if (ViewBag.Message != null)
+                    {
+                        <div class="alert alert-danger">
+                            <strong>Erreur!</strong> @ViewBag.Message
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    }
+
+}
+
+        @section Scripts {
+            @Scripts.Render("~/bundles/jqueryval")
+
+            <script type="text/javascript">
+
+                /*
+                $(document).ready(function () {
+
+                   
+
+                }); */
+
+                function updateCoords(c) {
+                    $('#X').val(c.x);
+                    $('#Y').val(c.y);
+                    $('#W').val(c.w);
+                    $('#H').val(c.h);
+                }
+
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                       
+                        reader.onload = function (e) {
+                            $('#cropbox').attr('src', e.target.result);
+                            $('#cropbox').Jcrop({
+                                onSelect: updateCoords
+                            });
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+                $("#inputimage").change(function () {
+                    
+                    readURL(this);
+                });
+
+            </script>
+        }
+
+        

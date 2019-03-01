@@ -1,0 +1,130 @@
+﻿<h2> Mes données </h2>
+
+<div class="container">
+
+    <div class="row">
+
+        <div id="accodion1" style="width: 50%;" class="panel-group col-sm">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a href="#panelBody11" data-toggle="collapse" data-parent="#accordion">
+                            Formations
+                        </a>
+                    </h4>
+                </div>
+                <div id="panelBody11" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                        <div id="AffichageFormations">
+                            @Html.Action("Formations")
+                        </div>
+
+                        <div id="AffichageFormationForm">
+                            @Html.Action("AddOrEditFormation")
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#panelBody12" data-toggle="collapse" data-parent="#accordion">
+                                Competences
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="panelBody12" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <div id="AffichageCompetences">
+                                @Html.Action("Competences")
+                            </div>
+
+                            <div id="AffichageCompetenceForm">
+                                @Html.Action("AddOrEditCompetence")
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+            <div id="accodion2" style="width: 50%" class="col-sm">
+                <div class="panel panel-primary">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#panelBody23" data-toggle="collapse" data-parent="#accordion">
+                                Experiences
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="panelBody23" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            
+                            <div id="AffichageExperiences">
+                                @Html.Action("Experiences")
+                            </div>
+
+                            <div id="AffichageExperienceForm">
+                                @Html.Action("AddOrEditExperience")
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a href="#panelBody24" data-toggle="collapse" data-parent="#accordion">
+                                Langues
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="panelBody24" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            
+                            <div id="AffichageLangues">
+                                @Html.Action("Langues")
+                            </div>
+
+                            <div id="AffichageLangueForm">
+                                @Html.Action("AddOrEditLangue")
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+@* TODO : peut etre à virer *@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            ResetForm1($('#form1'));
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,5 @@
+﻿Enable-Migrations -ContextTypeName Context -MigrationsDirectory Migrations
+
+add-migration -ConfigurationTypeName CVtheque.Data.Migrations "InitialCreate"
+
+update-database -ConfigurationTypeName CVtheque.Data.Migrations

@@ -1,0 +1,47 @@
+﻿@model ICollection<CVtheque.Web.Models.CompetenceVM>
+
+@{
+    ViewBag.Title = "Competences";
+    Layout = null;
+}
+
+<br />
+
+<form action="/Donnees/DeleteCompetence" data-ajax="true" data-ajax-mode="replace" data-ajax-update="#AffichageCompetences" id="form2" method="post" novalidate="novalidate">
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+
+    <div class="row grid-striped">
+
+        <div class="col-6">
+            <input type="hidden" name="competences[@i].Id" value="@Model.ElementAt(i).Id" />
+            <input type="hidden" id="tobedel_@i" name="competences[@i].ToBeDeleted" value="false" />
+            @Model.ElementAt(i).Label
+        </div>
+
+        <div class="col-3">
+            <button type="button" class="btn btn-light">
+                <span style="font-size: 1em; color: green;">
+                    <i class="fas fa-edit" data-internalid="@Model.ElementAt(i).Id"></i>
+                </span>
+            </button>
+            <button type="button" class="btn btn-light">
+                <span style="font-size: 1em; color: red;">
+                    <i class="fas fa-trash-alt" data-internalid="@i"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    }
+
+    <br />
+
+    <button type="button" class="btn btn-light">
+        <span style="font-size: 1.2em; color: green;">
+            <i class="fas fa-plus-square"></i>
+        </span>
+    </button>
+
+</form>

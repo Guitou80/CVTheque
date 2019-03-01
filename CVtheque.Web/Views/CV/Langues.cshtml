@@ -1,0 +1,36 @@
+﻿@model ICollection<CVtheque.Web.Models.LangueVM>
+
+@{
+    ViewBag.Title = "Langues";
+    Layout = null;
+}
+
+<br />
+
+<div class="row grid-striped bg-primary">
+
+    <div class="col-6">
+        Label
+    </div>
+    <div class="col-6">
+        Niveau
+    </div>
+
+</div>
+
+    @for (int i = 0; i < Model.Count(); i++)
+    {
+
+    <div class="row grid-striped">
+
+        <div class="col-6" data-id="@Model.ElementAt(i).Id">
+            @Model.ElementAt(i).Label
+        </div>
+
+        <div class="col-6">
+            @Model.ElementAt(i).Niveau
+        </div>
+
+    </div>
+
+    }

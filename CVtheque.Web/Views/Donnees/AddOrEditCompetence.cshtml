@@ -1,0 +1,46 @@
+﻿@model CVtheque.Web.Models.CompetenceVM
+
+@{
+    //ViewBag.Title = "AddOrEditFormation";
+    Layout = null;
+}
+
+
+<form action="/Donnees/AddOrEditCompetence" data-ajax="true" data-ajax-mode="replace" data-ajax-success="ResetForm3(this);" data-ajax-update="#AffichageCompetences" id="form3" method="post" novalidate="novalidate">
+
+    @Html.AntiForgeryToken()
+
+    <span class="action">@Model.FormTitre</span>
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" }) 
+
+        <input type="hidden" id="HiddenInput" name="Id" value="@Model.Id" />
+        <input type="hidden" name="FormAction" value="@Model.FormAction" />
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Ecole">Label</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Label, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Label, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2" for="Description">Details</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Details, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Details, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Valider" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+
+</form>
