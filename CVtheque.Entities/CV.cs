@@ -17,12 +17,11 @@ namespace CVtheque.Entities
             this.Competences = new HashSet<Competence>();
             this.Langues = new HashSet<Langue>();
         }
-        
 
         public int Id { get; set; }
 
         public string Titre { get; set; }
-
+        public int Layout { get; set; }
         public bool MontrerPhoto { get; set; }
 
         public virtual ICollection<Langue> Langues { get; set; }

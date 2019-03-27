@@ -18,15 +18,17 @@
     <div class="col-3">
         Entreprise
     </div>
-    <div class="col-3">
+    <div class="col-2">
        Poste
+    </div>
+    <div class="col-1">
     </div>
 </div>
 
     @for (int i = 0; i < Model.Count(); i++)
     {
 
-    <div class="row grid-striped" data-id="@Model.ElementAt(i).Id">
+    <div class="row grid-striped highlightable" data-id="@Model.ElementAt(i).Id">
         <div class="col-3">
             @Model.ElementAt(i).DateDebut.ToString("d")
         </div>
@@ -36,8 +38,14 @@
         <div class="col-3">
             @Model.ElementAt(i).Entreprise
         </div>
-        <div class="col-3">
+        <div class="col-2">
             @Model.ElementAt(i).Poste
+        </div>
+
+        <div class="col-1">
+            <span class="green">
+                <i class="fas fa-plus-square"></i>
+            </span>
         </div>
         
     </div>

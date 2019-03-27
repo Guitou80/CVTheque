@@ -3,21 +3,31 @@
 }
 
 
-<h2>Mes CV</h2>
+<h1>Mes CV</h1>
 
 
 <div class="row">
 
     <div class="col-4">
 
-        @Html.Action("Donnees")
+        <div id="AffichageCVs">
+            @Html.Action("CVs")
+        </div>
+
+        <div id="AffichageCVForm">
+            @Html.Action("AddOrEditCV")
+        </div>
 
     </div>
 
     <div class="col-8" style="background-color:deeppink; height : 100vh">
 
-        @Html.Action("CV")
+        @Html.Action("CVLayout1")
 
     </div>
 
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

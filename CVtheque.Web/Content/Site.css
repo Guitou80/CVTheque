@@ -17,7 +17,7 @@ main {
     display: grid;
     
     /* grid-template-columns: repeat(4, minmax(100px, auto));*/
-    grid-template-rows: auto minmax(auto, 100%) 50px;
+    grid-template-rows: auto minmax(auto, 100%);
     grid-template-areas: "header header header header" "main main main main" "footer footer footer footer";
     height: 100%;
 }
@@ -27,30 +27,65 @@ main {
         grid-area: header;
     }
 
-        #container nav li {
-            margin-left:10px; 
-        }
+    #container nav li {
+        margin-left:10px; 
+    }
 
-            #container nav a {
-            color: white;
-        }
-
+        #container nav a {
+        color: white;
+    }
 
     #container main {
         padding: 50px;
+        font-size:10px;
         grid-area: main;
         overflow-y: auto;
         display: grid;
-        /* grid-template-columns: repeat(2, auto); */
         grid-template-rows: repeat(5, auto);
+    }
+
+
+    #container main #AffichageCVForm {
+        padding: 20px;
+        background-color: #999999;
+    }
+
+    #container main #AffichageCVForm #DonneesParCv {
+       padding:10px;
+    }
+
+    /* a conserver les 2 classes ci dessous pour le toggle class en jquery*/
+
+    #container main #AffichageCVForm #DonneesParCv span.green {
+        font-size: 1.5em;
+        color: green
+    }
+
+    #container main #AffichageCVForm #DonneesParCv span.black {
+        font-size: 1.5em;
+        color: black;
+    }
+
+    /*---------------*/
+
+    #container main h1{
+        font-size:14px;
+    }
+
+    #container main h2 {
+        font-size: 12px;
     }
 
     #container main .panel-body div {
         border: 1px solid black;
     }
 
-    #container main span.action{
-        color:red;
+    #container main #AffichageCVForm{
+        font-size: 9px;
+    }
+        
+    #container main span.action {
+        color: red;
         font-size: 12px;
     }
 

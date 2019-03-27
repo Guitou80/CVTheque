@@ -158,9 +158,11 @@
     <Compile Include="Models\CompetenceVM.cs" />
     <Compile Include="Models\Crypto.cs" />
     <Compile Include="Models\CVVM.cs" />
+    <Compile Include="Models\DeleteCVVM.cs" />
     <Compile Include="Models\DeleteLangueVM.cs" />
     <Compile Include="Models\DeleteExperienceVM.cs" />
     <Compile Include="Models\DeleteCompetenceVM.cs" />
+    <Compile Include="Models\CVsVM.cs" />
     <Compile Include="Models\DonneesVM.cs" />
     <Compile Include="Models\ExperienceVM.cs" />
     <Compile Include="Models\DeleteFormationVM.cs" />
@@ -264,6 +266,8 @@
     <Content Include="Views\CV\Langues.cshtml" />
     <Content Include="Views\CV\Donnees.cshtml" />
     <Content Include="Views\CV\CVLayout1.cshtml" />
+    <Content Include="Views\CV\CVs.cshtml" />
+    <Content Include="Views\CV\AddOrEditCV.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -13,7 +13,7 @@ namespace CVtheque.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201902192107380_Initial"; }
+            get { return "201903131021591_Initial"; }
         }
         
         string IMigrationMetadata.Source

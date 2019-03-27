@@ -1,0 +1,91 @@
+﻿@model CVtheque.Web.Models.CVVM
+
+@{
+    Layout = null;
+}
+
+
+<form action="/CV/AddOrEditCV" data-ajax="true" data-ajax-mode="replace" data-ajax-success="ResetCVForm1(this);" data-ajax-update="#AffichageCVs" id="CVform1" method="post" novalidate="novalidate">
+
+    @Html.AntiForgeryToken()
+
+    <span class="action">@Model.FormTitre</span>
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <input type="hidden" id="HiddenInput" name="Id" value="@Model.Id" />
+        <input type="hidden" id="IdFormAction" name="FormAction" value="@Model.FormAction" />
+
+        <div class="form-group">
+            <label class="control-label col-md-10" for="Ecole">Titre</label>
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Titre, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Titre, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-10">
+                Montrer la photo :
+                @Html.EditorFor(model => model.MontrerPhoto, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.MontrerPhoto, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.Action("Donnees")
+
+
+        @* TODO : utile pour controller AddOrEditCV en GET, à virer et remplacer par directement une implémentation de arrays en javascript *@
+
+        <div id="cvHiddenInputs">
+
+            @if (Model.Formations != null)
+            {
+                for (int i = 0; i < Model.Formations.Count(); i++)
+                {
+                    <input type="hidden" name="FormationsIds[]" value="@Model.Formations.ElementAt(i).Id" />
+                }
+            }
+
+            @if (Model.Competences != null)
+            {
+                for (int i = 0; i < Model.Competences.Count(); i++)
+                {
+                    <input type="hidden" name="CompetencesIds[]" value="@Model.Competences.ElementAt(i).Id" />
+                }
+            }
+
+            @if (Model.Experiences != null)
+            {
+                for (int i = 0; i < Model.Experiences.Count(); i++)
+                {
+                    <input type="hidden" name="ExperiencesIds[]" value="@Model.Experiences.ElementAt(i).Id" />
+                }
+            }
+
+            @if (Model.Langues != null)
+            {
+                for (int i = 0; i < Model.Langues.Count(); i++)
+                {
+                    <input type="hidden" name="LanguesIds[]" value="@Model.Langues.ElementAt(i).Id" />
+                }
+            }
+
+        </div>
+
+        <div class="form-group">
+            <div class="row grid-striped">
+                <div class="col-md-3">
+                    <input type="button" value="Valider" class="btn btn-default" id="SubmitAddOrEditCV" />
+                </div>
+                <div class="col-md-8" id="DivAlert">
+                    
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>

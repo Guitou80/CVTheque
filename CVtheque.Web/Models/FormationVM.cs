@@ -24,8 +24,7 @@ namespace CVtheque.Web.Models
         [Required(ErrorMessage = "Ce champ est requis")]
         [StringLength(100)]
         public string Ecole { get; set; }
-
-        [Required(ErrorMessage = "Ce champ est requis")]
+        
         [StringLength(250)]
         [DataType(DataType.MultilineText)]
         public string Description { get; set; }

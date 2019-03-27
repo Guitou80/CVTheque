@@ -16,7 +16,7 @@ namespace CVtheque.Entities
         }
 
         public int Id { get; set; }
-
+        //TODO changer en DateDebut et DateFin
         public DateTime DatedeDebut { get; set; }
         public DateTime DatedeFin { get; set; }
         public string Entreprise { get; set; }

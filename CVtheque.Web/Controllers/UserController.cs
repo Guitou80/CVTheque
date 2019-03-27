@@ -4,6 +4,8 @@ using CVtheque.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -116,24 +118,6 @@ namespace CVtheque.Web.Controllers
                             return View(personne);
                         }
 
-                        if (myImage.Width > 600 || myImage.Height > 800)
-                        {
-                            if (!(personne.CropW < 600 && personne.CropW > 0 && personne.CropH < 800 && personne.CropH > 0))
-                            {
-                                ViewBag.Message = "Le fichier image ne doit pas avoir une résolution supérieure à 600 * 800 pixels";
-                                ViewBag.Status = false;
-
-                                if (System.IO.File.Exists(fileName))
-                                {
-                                    myImage.Dispose();
-                                    System.IO.File.Delete(fileName);
-                                }
-
-                                return View(personne);
-                            }
-
-                        }
-
                         //On recadre l'image
 
                         if (personne.CropW > 0 && personne.CropH > 0)
@@ -149,6 +133,14 @@ namespace CVtheque.Web.Controllers
                             g = Graphics.FromImage(bmp);
                             g.DrawImage(myImage, new Rectangle(0, 0, myImage.Width, myImage.Height),
                                 new Rectangle(0, 0, myImage.Width, myImage.Height), GraphicsUnit.Pixel);
+                        }
+
+                        if (bmp.Width > 300) // si largeur de l'image supérieure à 300px on la redimmensionne
+                        {
+                            float ratio = (float)(bmp.Height) / (float)(bmp.Width);
+                            int newHeight = (int)(300 * ratio);
+
+                            bmp = ResizeImage(bmp, 300, newHeight);
                         }
 
                         System.Drawing.Imaging.ImageFormat frm = myImage.RawFormat;
@@ -421,10 +413,10 @@ namespace CVtheque.Web.Controllers
             {
                 //PHOTO
 
+                string PhotoRemplacee = Path.Combine(Server.MapPath("~/Images/") + personne.Photo);
+
                 if (personne.FichierPhoto != null)
                 {
-
-                    string PhotoRemplacee = Path.Combine(Server.MapPath("~/Images/") + personne.Photo);
 
                     if (!String.IsNullOrEmpty(personne.FichierPhoto.FileName))
                     {
@@ -453,23 +445,6 @@ namespace CVtheque.Web.Controllers
                             return View(personne);
                         }
 
-                        if(myImage.Width > 600 || myImage.Height > 800)
-                        {
-                            if(!(personne.CropW < 600 && personne.CropW > 0 && personne.CropH < 800 && personne.CropH > 0))
-                            {
-                                ViewBag.Message = "Le fichier image ne doit pas avoir une résolution supérieure à 600 * 800 pixels";
-                                ViewBag.Status = false;
-
-                                if (System.IO.File.Exists(fileNameFullPath))
-                                {
-                                    myImage.Dispose();
-                                    System.IO.File.Delete(fileNameFullPath);
-                                }
-
-                                return View(personne);
-                            }
-                            
-                        }
 
                         personne.Photo = fileName;
 
@@ -496,6 +471,14 @@ namespace CVtheque.Web.Controllers
                                 new Rectangle(0, 0, myImage.Width, myImage.Height), GraphicsUnit.Pixel);
                         }
 
+                        if(bmp.Width > 300) // si largeur de l'image supérieure à 300px on la redimmensionne
+                        {
+                            float ratio = (float)(bmp.Height) / (float)(bmp.Width);
+                            int newHeight = (int)(300 * ratio);
+
+                            bmp = ResizeImage(bmp, 300, newHeight);
+                        }
+
                         System.Drawing.Imaging.ImageFormat frm = myImage.RawFormat;
                         myImage.Dispose();
                         bmp.Save(fileNameFullPath, frm);
@@ -505,6 +488,31 @@ namespace CVtheque.Web.Controllers
                     }
 
                 }
+                else
+                {
+                    if(personne.CropX > 0 || personne.CropY > 0) //S'il y a eu recadrage de la photo avec Jcrop sans upload de photo
+                    {
+                        if (System.IO.File.Exists(PhotoRemplacee))
+                        {
+
+                            Image myImage = Image.FromFile(PhotoRemplacee);
+                            fileName = personne.Photo;
+
+                            //On recadre l'image
+
+                            bmp = new Bitmap(personne.CropW, personne.CropH, myImage.PixelFormat);
+                            g = Graphics.FromImage(bmp);
+                            g.DrawImage(myImage, new Rectangle(0, 0, personne.CropW, personne.CropH),
+                                new Rectangle(personne.CropX, personne.CropY, personne.CropW, personne.CropH), GraphicsUnit.Pixel);
+
+                            System.Drawing.Imaging.ImageFormat frm = myImage.RawFormat;
+                            myImage.Dispose();
+                            bmp.Save(PhotoRemplacee, frm);
+
+                        }
+                    }
+                }
+
 
                 int userId = int.Parse(HttpContext.User.Identity.Name);
 
@@ -546,6 +554,33 @@ namespace CVtheque.Web.Controllers
             ViewBag.Status = status;
 
             return View(personne);
+        }
+
+
+
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
 
     }

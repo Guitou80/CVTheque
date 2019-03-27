@@ -26,6 +26,7 @@ namespace CVtheque.Data.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Titre = c.String(),
+                        Layout = c.Int(nullable: false),
                         MontrerPhoto = c.Boolean(nullable: false),
                         PersonneId = c.Int(nullable: false),
                     })

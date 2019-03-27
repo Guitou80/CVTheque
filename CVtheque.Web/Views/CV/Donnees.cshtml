@@ -4,111 +4,54 @@
 }
 
 
-<div class="container" style="background-color: gray; padding:20px; margin:0px;">
+<div class="container" id="DonneesParCv">
 
     <div class="row">
 
         <div class="col-12">
 
-            <div id="accodion" class="panel-group">
+            <h2>
+                Modèles
+            </h2>
 
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a href="#panelBodyZero" data-toggle="collapse" data-parent="#accordion">
-                                Modèles
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="panelBodyZero" class="panel-collapse collapse">
-                        <div class="panel-body">
+            mes modèles de CV<br />
+            mes modèles de CV<br />
+            mes modèles de CV<br />
+            mes modèles de CV<br />
+            mes modèles de CV<br />
+            mes modèles de CV<br />
+            mes modèles de CV<br />
 
-                            mes modèles de CV<br />
-                            mes modèles de CV<br />
-                            mes modèles de CV<br />
-                            mes modèles de CV<br />
-                            mes modèles de CV<br />
-                            mes modèles de CV<br />
-                            mes modèles de CV<br />
-
-                        </div>
-                    </div>
-
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a href="#panelBodyOne" data-toggle="collapse" data-parent="#accordion">
-                                    Formations
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="panelBodyOne" class="panel-collapse collapse">
-                            <div class="panel-body">
-
-                                @Html.Action("Formations")
-
-                            </div>
-                        </div>
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a href="#panelBodyTwo" data-toggle="collapse" data-parent="#accordion">
-                                        Competences
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="panelBodyTwo" class="panel-collapse collapse">
-                                <div class="panel-body">
-
-                                    @Html.Action("Competences")
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a href="#panelBodyThree" data-toggle="collapse" data-parent="#accordion">
-                                        Experiences
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="panelBodyThree" class="panel-collapse collapse">
-                                <div class="panel-body">
-
-                                    @Html.Action("Experiences")
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a href="#panelBodyFour" data-toggle="collapse" data-parent="#accordion">
-                                        Langues
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="panelBodyFour" class="panel-collapse collapse">
-                                <div class="panel-body">
-
-                                    @Html.Action("Langues")
-
-                                </div>
-                            </div>
-                        </div>
-
-
-                    </div>
-                </div>
-
+            <h2>
+                Formations
+            </h2>
+            <div id="formations">
+                @Html.Action("Formations")
             </div>
 
+            <h2>
+                Competences
+            </h2>
+            <div id="competences">
+                @Html.Action("Competences")
+            </div>
+
+            <h2>
+                Experiences
+            </h2>
+
+            <div id="experiences">
+                @Html.Action("Experiences")
+            </div>
+
+            <h2>
+                Langues
+            </h2>
+
+            <div id="langues">
+                @Html.Action("Langues")
+            </div>
         </div>
-
     </div>
-
 </div>
+
