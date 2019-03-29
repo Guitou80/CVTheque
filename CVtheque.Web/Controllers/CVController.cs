@@ -17,7 +17,35 @@ namespace CVtheque.Web.Controllers
         [Authorize]
         public ActionResult Index()
         {
-            return View();
+
+            Context context = new Context();
+
+            using (context)
+            {
+
+                int userId = int.Parse(HttpContext.User.Identity.Name);
+
+                var query =
+                    (
+                        from p in context.Personnes
+                        where p.Id == userId
+                        select new PersonneVM
+                        {
+                            Prenom = p.Prenom,
+                            Nom = p.Nom,
+                            DateDeNaissance = p.DateDeNaissance,
+                            NumeroTel = p.NumeroTel,
+                            Email = p.Email,
+                            Permis = p.Permis,
+                            CodePostal = p.CodePostal,
+                            Adresse = p.Adresse,
+                            Commune = p.Commune,
+                            Photo = p.Photo
+                        }).FirstOrDefault();
+
+                return View(query);
+            }
+
         }
 
         public ActionResult CVs()
@@ -677,72 +705,3 @@ namespace CVtheque.Web.Controllers
         }
     }
 }
-
-
-
-
-/*________________________________________________________________________
- * _______________________________________________________________________
- * 
- Context context = new Context();
-
-            using (context)
-            {
-
-                var donneesVM = new DonneesVM();
-
-                int userId = int.Parse(HttpContext.User.Identity.Name);
-               
-
-                    var donnees =
-                        (
-
-                            from personne in context.Personnes
-                            where personne.Id == userId
-                            select new DonneesVM
-                            {
-                                
-                                Competences = personne.Competences.Select(comp => new CompetenceVM
-                                {
-                                    Id = comp.Id,
-                                    Label = comp.Label,
-                                    Details = comp.Details
-                                }),
-
-                                Experiences = personne.Experiences.Select(exp => new ExperienceVM
-                                {
-                                    Id = exp.Id,
-                                    DatedeDebut = exp.DatedeDebut,
-                                    DatedeFin = exp.DatedeFin,
-                                    Entreprise = exp.Entreprise,
-                                    Poste = exp.Poste,
-                                    Description = exp.Description
-                                    
-                                }),
-
-                                Langues = cv.Langues.Select(lan => new LangueVM
-                                {
-                                    Id = lan.Id,
-                                    Label = lan.Label,
-                                    Niveau = lan.Niveau
-                                }), 
-
-Formations = personne.Formations.Select(form => new FormationVM
-                                {
-                                    Id = form.Id,
-                                    DateDebut = form.DateDebut,
-                                    DateFin = form.DateFin,
-                                    Ecole = form.Ecole,
-                                    Description = form.Description,
-                                    Diplome = form.Diplome
-
-                                }),
-
-                            }
-
-                        ).FirstOrDefault();
-
-                    return View(donnees);
-                }
-
-*/

@@ -349,6 +349,7 @@ function myAjaxRequestEditCV1(myUrl, divTargetId, id) {
             $(divTargetId).html(response);
             setDonneesIdsArrays(divTargetId);
             highlightInitialData();
+            UpdateCVLayout(personneData, cvData);
         }
        ,
         failure: function (response) {
@@ -365,15 +366,6 @@ function myAjaxRequestEditCV1(myUrl, divTargetId, id) {
 }
 
 
-
-$(document.body).on('click', '#CVform0 .fa-edit', function () {
-
-    ResetCVForm1($('#CVform1'));
-
-    myAjaxRequestEditCV1('/CV/AddOrEditCV', '#AffichageCVForm', $(this).attr('data-internalid'));
-});
-
-
 $(document.body).on('click', '#SubmitAddOrEditCV', function () {
 
     var FormAction = $('#CVform1').find('input').eq(2).val();
@@ -383,20 +375,17 @@ $(document.body).on('click', '#SubmitAddOrEditCV', function () {
         Id: $('#CVform1').find('input').eq(1).val(),
         FormAction,
         Titre: $('#CVform1').find('input').eq(3).val(),
-        MontrerPhoto: $('#CVform1').find('input').eq(4).val(),
+        MontrerPhoto: $('#CVform1').find('input').eq(4).is(':checked'),
         formationsIds, competencesIds, experiencesIds, languesIds
     });
-
 
     $.ajax({
 
         contentType: 'application/json; charset=utf-8',
-        //dataType: 'json',
         type: 'POST',
         url: '/CV/AddOrEditCV',
         data: data,
         success: function (result) {
-            //alert('success');
             $('#AffichageCVs').html(result);
 
             if (FormAction == "AjoutTraitement") {
@@ -422,6 +411,12 @@ $(document.body).on('click', '#SubmitAddOrEditCV', function () {
 
 });
 
+$(document.body).on('click', '#CVform0 .fa-edit', function () {
+
+    ResetCVForm1($('#CVform1'));
+
+    myAjaxRequestEditCV1('/CV/AddOrEditCV', '#AffichageCVForm', $(this).attr('data-internalid'));
+});
 
 //édition d'un cv
 $(document.body).on('click', '#CVform0 .fa-trash-alt', function () {
@@ -466,3 +461,48 @@ $(document.body).on('click', '#CVform1 .fas', function () {
     SwitchDataHighlight(mydiv, true);
 
 });
+
+//__________________________________CV Layout_________________________________
+//____________________________________________________________________________
+
+function UpdateCVLayout(personne, cv) {
+
+    //var data = {"Id":4,"Titre":"coucou","Layout":0,"MontrerPhoto":true,"Personne":null,"PersonneId":0,"Langues":[{"Id":2,"Label":"français","Niveau":3,"FormAction":"Ajout","FormTitre":"Nouvelle langue","CVs":null}],"Experiences":[{"Id":2,"DateDebut":"\/Date(1280700000000)\/","DateFin":"\/Date(1386889200000)\/","Entreprise":"Auto entrepreneur","Poste":"Webmestre","Description":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null},{"Id":3,"DateDebut":"\/Date(1438466400000)\/","DateFin":"\/Date(1544655600000)\/","Entreprise":"Profroid","Poste":"cariste","Description":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null}],"Formations":[{"Id":2,"DateDebut":"\/Date(1551481200000)\/","DateFin":"\/Date(1551740400000)\/","Ecole":"Leeds","Description":null,"Diplome":"Agrégation","FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null},{"Id":3,"DateDebut":"\/Date(1551481200000)\/","DateFin":"\/Date(1551740400000)\/","Ecole":"Princeton","Description":null,"Diplome":"these","FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null}],"Competences":[{"Id":2,"Label":"CSS3","Details":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null},{"Id":3,"Label":"bootstrap","Details":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null}],"FormationsIds":null,"CompetencesIds":null,"LanguesIds":null,"ExperiencesIds":null,"FormAction":"EditionTraitement","FormTitre":"Edition de ce CV"};
+
+ 
+
+    if (cv.MontrerPhoto) {
+        $('#CVPhotoCVLayout img').attr('src', '/Images/' + personne.Photo);
+    } else {
+        $('#CVPhotoCVLayout img').attr('src', '');
+    }
+
+    $('#CVTitreCVLayout').find('span').eq(0).html(personne.Prenom + " " + personne.Nom);
+    $('#CVTitreCVLayout').find('span').eq(1).html(cv.Titre);
+
+    $('#PersonneCVLayout').find('span').eq(1).html(personne.Email);
+    $('#PersonneCVLayout').find('span').eq(3).html(personne.Adresse + "<br/>" + personne.CodePostal + " " + personne.Commune );
+    $('#PersonneCVLayout').find('span').eq(5).html(personne.NumeroTel);
+
+    if(personne.Permis){
+        $('#PersonneCVLayout').find('span').eq(7).html("Permis de conduire");
+    } else {
+        $('#PersonneCVLayout').find('span').eq(7).html("Pas de permis de conduire");
+    }
+
+    var htmlTags1 = "<div class=\"row grid-striped\"><div class=\"col-4\">";
+    var htmlTags2 = "</div><div class=\"col-8\">";
+    var htmlTags3 = "</div></div>";
+    var htmlExperiences = '';
+
+    for (var i = 0; i < cv.Experiences.length; i++) {
+        htmlExperiences += htmlTags1 + cv.Experiences[i].DateDebut + "-" + cv.Experiences[i].DateFin + htmlTags2 + 
+            cv.Experiences[i].Entreprise + "<br/>" + cv.Experiences[i].Poste + "<br/>" + cv.Experiences[i].Description + htmlTags3;
+    }
+
+    $('#CVDataCVLayout').find('div').eq(0).html(htmlExperiences);
+
+    //debugger;
+
+    //
+}

@@ -4,12 +4,20 @@
     Layout = null;
 }
 
+<script type="text/javascript">
+
+    var cvData = @Html.Raw(Json.Encode(@Model));
+
+    //debugger;
+
+</script>
+
 
 <form action="/CV/AddOrEditCV" data-ajax="true" data-ajax-mode="replace" data-ajax-success="ResetCVForm1(this);" data-ajax-update="#AffichageCVs" id="CVform1" method="post" novalidate="novalidate">
 
     @Html.AntiForgeryToken()
 
-    <span class="action">@Model.FormTitre</span>
+    <span class="action">@Model.FormTitre - @Model.MontrerPhoto</span>
 
     <div class="form-horizontal">
 
@@ -30,7 +38,6 @@
             <div class="col-md-10">
                 Montrer la photo :
                 @Html.EditorFor(model => model.MontrerPhoto, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MontrerPhoto, "", new { @class = "text-danger" })
             </div>
         </div>
 

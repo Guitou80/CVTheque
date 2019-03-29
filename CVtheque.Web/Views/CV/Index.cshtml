@@ -1,10 +1,15 @@
-﻿@{
+﻿@model CVtheque.Web.Models.PersonneVM
+@{
     ViewBag.Title = "CV";
 }
 
+<script type="text/javascript">
+
+    var personneData = @Html.Raw(Json.Encode(@Model));
+
+</script>
 
 <h1>Mes CV</h1>
-
 
 <div class="row">
 
