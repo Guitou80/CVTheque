@@ -35,13 +35,11 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
-
+                        
                         from personne in context.Personnes
                         where personne.Id == userId
                         select new DonneesVM
@@ -136,9 +134,7 @@ namespace CVtheque.Web.Controllers
                         forma.Diplome = formation.Diplome;
                         forma.PersonneId = userId;
 
-                        Context context = new Context();
-
-                        using (context)
+                        using (Context context = new Context())
                         {
                             context.Formations.Add(forma);
                             context.SaveChanges();
@@ -228,9 +224,7 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
@@ -239,21 +233,18 @@ namespace CVtheque.Web.Controllers
                         where personne.Id == userId
                         select new DonneesVM
                         {
-
                             Competences = personne.Competences.Select(form => new CompetenceVM
                             {
                                 Id = form.Id,
                                 Label = form.Label,
                                 Details = form.Details
                             }),
-
                         }
 
                     ).FirstOrDefault();
 
                 return donnees.Competences.ToList<CompetenceVM>();
             }
-
         }
 
 
@@ -332,9 +323,9 @@ namespace CVtheque.Web.Controllers
                     using (Context context = new Context())
                     {
 
-                        var result = (from f in context.Competences
-                                      where f.Id == competence.Id && f.PersonneId == userId
-                                      select f).SingleOrDefault();
+                        var result = (from c in context.Competences
+                                      where c.Id == competence.Id && c.PersonneId == userId
+                                      select c).SingleOrDefault();
 
                         if (result != null)
                         {
@@ -343,12 +334,8 @@ namespace CVtheque.Web.Controllers
 
                             context.SaveChanges();
                         }
-
                     }
-
-
                 }
-
             }
 
             return RedirectToAction("Competences");
@@ -362,23 +349,23 @@ namespace CVtheque.Web.Controllers
             int userId = int.Parse(HttpContext.User.Identity.Name);
             int id = -1;
 
-            foreach (DeleteCompetenceVM form in competences)
+            foreach (DeleteCompetenceVM comp in competences)
             {
-                if (form.ToBeDeleted == true)
+                if (comp.ToBeDeleted == true)
                 {
-                    id = form.Id;
+                    id = comp.Id;
                 }
             }
 
             using (Context context = new Context())
             {
 
-                var x = (from f in context.Competences
-                         where f.Id == id && f.PersonneId == userId
-                         select f).FirstOrDefault();
-                if (x != null)
+                var comp = (from c in context.Competences
+                         where c.Id == id && c.PersonneId == userId
+                         select c).FirstOrDefault();
+                if (comp != null)
                 {
-                    context.Competences.Remove(x);
+                    context.Competences.Remove(comp);
                     context.SaveChanges();
                 }
             }
@@ -404,9 +391,7 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
@@ -448,25 +433,25 @@ namespace CVtheque.Web.Controllers
                 using (Context context = new Context())
                 {
 
-                    var compet =
+                    var exper =
                         (
-                            from f in context.Experiences
-                            where f.Id == id && f.PersonneId == userId
+                            from e in context.Experiences
+                            where e.Id == id && e.PersonneId == userId
                             select new ExperienceVM
                             {
-                                DateDebut = f.DatedeDebut,
-                                DateFin = f.DatedeFin,
-                                Poste = f.Poste,
-                                Entreprise = f.Entreprise,
-                                Description = f.Description,
+                                DateDebut = e.DatedeDebut,
+                                DateFin = e.DatedeFin,
+                                Poste = e.Poste,
+                                Entreprise = e.Entreprise,
+                                Description = e.Description,
                                 Id = id,
                                 FormAction = "EditionTraitement",
                                 FormTitre = "Edition de cette expérience"
                             }).FirstOrDefault();
 
-                    if (compet != null)
+                    if (exper != null)
                     {
-                        return View(compet);
+                        return View(exper);
                     }
                     else
                     {
@@ -517,13 +502,12 @@ namespace CVtheque.Web.Controllers
                     using (Context context = new Context())
                     {
 
-                        var result = (from f in context.Experiences
-                                      where f.Id == experience.Id && f.PersonneId == userId
-                                      select f).SingleOrDefault();
+                        var result = (from e in context.Experiences
+                                      where e.Id == experience.Id && e.PersonneId == userId
+                                      select e).SingleOrDefault();
 
                         if (result != null)
                         {
-
                             result.DatedeDebut = experience.DateDebut;
                             result.DatedeFin = experience.DateFin;
                             result.Poste = experience.Poste;
@@ -551,20 +535,20 @@ namespace CVtheque.Web.Controllers
             int userId = int.Parse(HttpContext.User.Identity.Name);
             int id = -1;
 
-            foreach (DeleteExperienceVM form in experiences)
+            foreach (DeleteExperienceVM exper in experiences)
             {
-                if (form.ToBeDeleted == true)
+                if (exper.ToBeDeleted == true)
                 {
-                    id = form.Id;
+                    id = exper.Id;
                 }
             }
 
             using (Context context = new Context())
             {
 
-                var x = (from f in context.Experiences
-                         where f.Id == id && f.PersonneId == userId
-                         select f).FirstOrDefault();
+                var x = (from e in context.Experiences
+                         where e.Id == id && e.PersonneId == userId
+                         select e).FirstOrDefault();
                 if (x != null)
                 {
                     context.Experiences.Remove(x);
@@ -593,9 +577,7 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
@@ -698,9 +680,9 @@ namespace CVtheque.Web.Controllers
                     using (Context context = new Context())
                     {
 
-                        var result = (from f in context.Langues
-                                      where f.Id == langue.Id && f.PersonneId == userId
-                                      select f).SingleOrDefault();
+                        var result = (from l in context.Langues
+                                      where l.Id == langue.Id && l.PersonneId == userId
+                                      select l).SingleOrDefault();
 
                         if (result != null)
                         {
@@ -712,10 +694,7 @@ namespace CVtheque.Web.Controllers
                         }
 
                     }
-
-
                 }
-
             }
 
             return RedirectToAction("Langues");
@@ -730,20 +709,19 @@ namespace CVtheque.Web.Controllers
             int userId = int.Parse(HttpContext.User.Identity.Name);
             int id = -1;
 
-            foreach (DeleteLangueVM form in langues)
+            foreach (DeleteLangueVM lang in langues)
             {
-                if (form.ToBeDeleted == true)
+                if (lang.ToBeDeleted == true)
                 {
-                    id = form.Id;
+                    id = lang.Id;
                 }
             }
 
             using (Context context = new Context())
             {
-
-                var x = (from f in context.Langues
-                         where f.Id == id && f.PersonneId == userId
-                         select f).FirstOrDefault();
+                var x = (from l in context.Langues
+                         where l.Id == id && l.PersonneId == userId
+                         select l).FirstOrDefault();
                 if (x != null)
                 {
                     context.Langues.Remove(x);

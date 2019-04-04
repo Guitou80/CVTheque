@@ -18,9 +18,7 @@ namespace CVtheque.Web.Controllers
         public ActionResult Index()
         {
 
-            Context context = new Context();
-
-            using (context)
+            using (Context context = new Context())
             {
 
                 int userId = int.Parse(HttpContext.User.Identity.Name);
@@ -61,24 +59,20 @@ namespace CVtheque.Web.Controllers
             {
 
                 var cvVM = new CVVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
 
                 var donnees =
                     (
 
-                        from personne in context.Personnes
-                        where personne.Id == userId
+                        from p in context.Personnes
+                        where p.Id == userId
                         select new CVsVM
                         {
-
-                            CVs = personne.CVs.Select(cv => new CVVM
+                             CVs = p.CVs.Select(cv => new CVVM
                             {
                                 Id = cv.Id,
                                 Titre = cv.Titre
-
                             }),
-
                         }
 
                     ).FirstOrDefault();
@@ -86,7 +80,6 @@ namespace CVtheque.Web.Controllers
                 return donnees.CVs.ToList<CVVM>();
 
             }
-
         }
 
 
@@ -102,62 +95,61 @@ namespace CVtheque.Web.Controllers
                 using (Context context = new Context())
                 {
 
-                    var cv =
-                                    (
-                                        from c in context.CVs
-                                        where c.Id == id && c.PersonneId == userId
-                                        select new CVVM
-                                        {
-                                            Titre = c.Titre,
-                                            MontrerPhoto = c.MontrerPhoto,
-                                            Layout = c.Layout,
-                                            Id = id,
-                                            FormAction = "EditionTraitement",
-                                            FormTitre = "Edition de ce CV",
+                    var cv =(
+                            from c in context.CVs
+                            where c.Id == id && c.PersonneId == userId
+                            select new CVVM
+                            {
+                                Titre = c.Titre,
+                                MontrerPhoto = c.MontrerPhoto,
+                                Layout = c.Layout,
+                                Id = id,
+                                FormAction = "EditionTraitement",
+                                FormTitre = "Edition de ce CV",
 
-                                             Formations = from form in c.Formations
-                                                          where c.Id == id && c.PersonneId == userId
-                                                          select new FormationVM
-                                                         {
-                                                             Id = form.Id,
-                                                             DateDebut = form.DateDebut,
-                                                             DateFin = form.DateFin,
-                                                             Ecole = form.Ecole,
-                                                             Description = form.Description,
-                                                             Diplome = form.Diplome
-                                                         },
+                                    Formations = from form in c.Formations
+                                                where c.Id == id && c.PersonneId == userId
+                                                select new FormationVM
+                                                {
+                                                    Id = form.Id,
+                                                    DateDebut = form.DateDebut,
+                                                    DateFin = form.DateFin,
+                                                    Ecole = form.Ecole,
+                                                    Description = form.Description,
+                                                    Diplome = form.Diplome
+                                                },
 
-                                             Competences = from comp in c.Competences
-                                                          where c.Id == id && c.PersonneId == userId
-                                                          select new CompetenceVM
-                                                          {
-                                                              Id = comp.Id,
-                                                              Label = comp.Label,
-                                                              Details = comp.Details
-                                                          },
+                                    Competences = from comp in c.Competences
+                                                where c.Id == id && c.PersonneId == userId
+                                                select new CompetenceVM
+                                                {
+                                                    Id = comp.Id,
+                                                    Label = comp.Label,
+                                                    Details = comp.Details
+                                                },
 
-                                            Experiences = from exp in c.Experiences
-                                                          where c.Id == id && c.PersonneId == userId
-                                                          select new ExperienceVM
-                                                          {
-                                                              Id = exp.Id,
-                                                              DateDebut = exp.DatedeDebut,
-                                                              DateFin = exp.DatedeFin,
-                                                              Entreprise = exp.Entreprise,
-                                                              Poste = exp.Poste,
-                                                              Description = exp.Description
-                                                          },
+                                Experiences = from exp in c.Experiences
+                                                where c.Id == id && c.PersonneId == userId
+                                                select new ExperienceVM
+                                                {
+                                                    Id = exp.Id,
+                                                    DateDebut = exp.DatedeDebut,
+                                                    DateFin = exp.DatedeFin,
+                                                    Entreprise = exp.Entreprise,
+                                                    Poste = exp.Poste,
+                                                    Description = exp.Description
+                                                },
 
-                                            Langues = from lang in c.Langues
-                                                          where c.Id == id && c.PersonneId == userId
-                                                          select new LangueVM
-                                                          {
-                                                              Id = lang.Id,
-                                                              Label = lang.Label,
-                                                              Niveau = lang.Niveau
-                                                          },
+                                Langues = from lang in c.Langues
+                                                where c.Id == id && c.PersonneId == userId
+                                                select new LangueVM
+                                                {
+                                                    Id = lang.Id,
+                                                    Label = lang.Label,
+                                                    Niveau = lang.Niveau
+                                                },
 
-                                        }).FirstOrDefault();
+                            }).FirstOrDefault();
 
                     if (cv!= null)
                     {
@@ -187,7 +179,6 @@ namespace CVtheque.Web.Controllers
             IEnumerable<int> languesIds = cv.LanguesIds;
 
 
-
             if (ModelState.IsValid) //Despite its name, it doesn't actually know anything about any model classes. 
                                     //The ModelState represents a Enumerable of name and value pairs that were submitted to the server during a POST. 
                                     //It also contains a Enumerable of error messages for each value submitted
@@ -215,10 +206,9 @@ namespace CVtheque.Web.Controllers
 
                     using (Context context = new Context())
                     {
-
-                        var result = (from f in context.CVs
-                                      where f.Id == cvId && f.PersonneId == userId
-                                      select f).SingleOrDefault();
+                        var result = (from c in context.CVs
+                                      where c.Id == cvId && c.PersonneId == userId
+                                      select c).SingleOrDefault();
 
                         if (result != null)
                         {
@@ -247,9 +237,9 @@ namespace CVtheque.Web.Controllers
 
                     if (formationsIds != null)
                     {
-                        var clientSideFormationsIds = (from c in context.Formations
-                                                       where formationsIds.Contains(c.Id)
-                                                       select c.Id);
+                        var clientSideFormationsIds = (from f in context.Formations
+                                                       where formationsIds.Contains(f.Id)
+                                                       select f.Id);
 
                         var serverSideFormationsIds = (from f in currentCV.Formations
                                                        select f.Id);
@@ -289,28 +279,28 @@ namespace CVtheque.Web.Controllers
                                                        where competencesIds.Contains(c.Id)
                                                        select c.Id);
 
-                        var serverSideCompetencesIds = (from f in currentCV.Competences
-                                                       select f.Id);
+                        var serverSideCompetencesIds = (from c in currentCV.Competences
+                                                       select c.Id);
 
                         var deletedCompetencesIds = serverSideCompetencesIds.Except(clientSideCompetencesIds).ToList<int>();
                         var addedCompetencesIds = clientSideCompetencesIds.Except(serverSideCompetencesIds).ToList<int>();
 
-                        var deletedCompetences = (from f in context.Competences
-                                                 where deletedCompetencesIds.Contains(f.Id)
-                                                 select f);
+                        var deletedCompetences = (from c in context.Competences
+                                                 where deletedCompetencesIds.Contains(c.Id)
+                                                 select c);
 
                         foreach (var competence in deletedCompetences)
                         {
                             currentCV.Competences.Remove(competence);
                         }
 
-                        var addedCompetences = (from f in context.Competences
-                                               where addedCompetencesIds.Contains(f.Id)
-                                               select f);
+                        var addedCompetences = (from c in context.Competences
+                                               where addedCompetencesIds.Contains(c.Id)
+                                               select c);
 
-                        foreach (var competence in addedCompetences)
+                        foreach (var comp in addedCompetences)
                         {
-                            currentCV.Competences.Add(competence);
+                            currentCV.Competences.Add(comp);
                         }
 
                     }
@@ -323,32 +313,32 @@ namespace CVtheque.Web.Controllers
 
                     if (experiencesIds != null)
                     {
-                        var clientSideExperiencesIds = (from c in context.Experiences
-                                                        where experiencesIds.Contains(c.Id)
-                                                        select c.Id);
+                        var clientSideExperiencesIds = (from e in context.Experiences
+                                                        where experiencesIds.Contains(e.Id)
+                                                        select e.Id);
 
-                        var serverSideExperiencesIds = (from f in currentCV.Experiences
-                                                        select f.Id);
+                        var serverSideExperiencesIds = (from e in currentCV.Experiences
+                                                        select e.Id);
 
                         var deletedExperiencesIds = serverSideExperiencesIds.Except(clientSideExperiencesIds).ToList<int>();
                         var addedExperiencesIds = clientSideExperiencesIds.Except(serverSideExperiencesIds).ToList<int>();
 
-                        var deletedExperiences = (from f in context.Experiences
-                                                  where deletedExperiencesIds.Contains(f.Id)
-                                                  select f);
+                        var deletedExperiences = (from e in context.Experiences
+                                                  where deletedExperiencesIds.Contains(e.Id)
+                                                  select e);
 
-                        foreach (var Experience in deletedExperiences)
+                        foreach (var exp in deletedExperiences)
                         {
-                            currentCV.Experiences.Remove(Experience);
+                            currentCV.Experiences.Remove(exp);
                         }
 
-                        var addedExperiences = (from f in context.Experiences
-                                                where addedExperiencesIds.Contains(f.Id)
-                                                select f);
+                        var addedExperiences = (from e in context.Experiences
+                                                where addedExperiencesIds.Contains(e.Id)
+                                                select e);
 
-                        foreach (var Experience in addedExperiences)
+                        foreach (var exp in addedExperiences)
                         {
-                            currentCV.Experiences.Add(Experience);
+                            currentCV.Experiences.Add(exp);
                         }
 
                     }
@@ -361,12 +351,12 @@ namespace CVtheque.Web.Controllers
 
                     if (languesIds != null)
                     {
-                        var clientSideLanguesIds = (from c in context.Langues
-                                                        where languesIds.Contains(c.Id)
-                                                        select c.Id);
+                        var clientSideLanguesIds = (from l in context.Langues
+                                                        where languesIds.Contains(l.Id)
+                                                        select l.Id);
 
-                        var serverSideLanguesIds = (from f in currentCV.Langues
-                                                        select f.Id);
+                        var serverSideLanguesIds = (from l in currentCV.Langues
+                                                        select l.Id);
 
                         var deletedLanguesIds = serverSideLanguesIds.Except(clientSideLanguesIds).ToList<int>();
                         var addedLanguesIds = clientSideLanguesIds.Except(serverSideLanguesIds).ToList<int>();
@@ -375,18 +365,18 @@ namespace CVtheque.Web.Controllers
                                                   where deletedLanguesIds.Contains(f.Id)
                                                   select f);
 
-                        foreach (var Langue in deletedLangues)
+                        foreach (var lang in deletedLangues)
                         {
-                            currentCV.Langues.Remove(Langue);
+                            currentCV.Langues.Remove(lang);
                         }
 
-                        var addedLangues = (from f in context.Langues
-                                                where addedLanguesIds.Contains(f.Id)
-                                                select f);
+                        var addedLangues = (from l in context.Langues
+                                                where addedLanguesIds.Contains(l.Id)
+                                                select l);
 
-                        foreach (var Langue in addedLangues)
+                        foreach (var lang in addedLangues)
                         {
-                            currentCV.Langues.Add(Langue);
+                            currentCV.Langues.Add(lang);
                         }
 
                     }
@@ -455,9 +445,7 @@ namespace CVtheque.Web.Controllers
         {
             int userId = int.Parse(HttpContext.User.Identity.Name);
 
-             Context context = new Context();
-
-                using (context)
+                using (Context context = new Context())
                 {
                 
                         var donnees =
@@ -533,7 +521,6 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
 
 
@@ -553,7 +540,6 @@ namespace CVtheque.Web.Controllers
                                 Ecole = form.Ecole,
                                 Description = form.Description,
                                 Diplome = form.Diplome
-
                             }),
 
                         }
@@ -582,13 +568,10 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
-
                         from personne in context.Personnes
                         where personne.Id == userId
                         select new DonneesVM
@@ -627,13 +610,10 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
-
                         from personne in context.Personnes
                         where personne.Id == userId
                         select new DonneesVM
@@ -675,18 +655,14 @@ namespace CVtheque.Web.Controllers
             {
 
                 var donneesVM = new DonneesVM();
-
                 int userId = int.Parse(HttpContext.User.Identity.Name);
-
 
                 var donnees =
                     (
-
                         from personne in context.Personnes
                         where personne.Id == userId
                         select new DonneesVM
                         {
-
                             Langues = personne.Langues.Select(lang => new LangueVM
                             {
                                 Id = lang.Id,

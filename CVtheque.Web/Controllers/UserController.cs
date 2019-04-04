@@ -27,8 +27,7 @@ namespace CVtheque.Web.Controllers
 
             bool status = false;
 
-            Context context = new Context();
-            using (context)
+            using (Context context = new Context())
             {
                 var v = context.Personnes.Where(a=>a.ActivationCode == new Guid(id)).FirstOrDefault();
                 if(v != null)
@@ -179,9 +178,7 @@ namespace CVtheque.Web.Controllers
                 user.IsEmailVerified = personne.IsEmailVerified;
                 user.ActivationCode = personne.ActivationCode;
 
-                Context context = new Context();
-
-                using (context)
+                using (Context context = new Context())
                 {
                     context.Personnes.Add(user);
                     context.SaveChanges();
@@ -235,9 +232,7 @@ namespace CVtheque.Web.Controllers
             user.Email = personne.Email;
             user.Password = personne.Password;
 
-            Context context = new Context();
-
-            using (context)
+            using (Context context = new Context())
             {
                 var v = context.Personnes.Where(a => a.Email == user.Email && a.IsEmailVerified == true).FirstOrDefault();
 
@@ -255,15 +250,6 @@ namespace CVtheque.Web.Controllers
                         cookie.Expires = DateTime.Now.AddMinutes(timeout);
                         cookie.HttpOnly = true;
                         Response.Cookies.Add(cookie);
-
-                        /* if (Url.IsLocalUrl(returnUrl))
-                        {
-                            return Redirect(returnUrl);
-                        }
-                        else
-                        {
-                            return RedirectToAction("Index", "Home");
-                        } */
 
                         return RedirectToAction("Index", "Home");
 
@@ -309,18 +295,15 @@ namespace CVtheque.Web.Controllers
         public bool EmailExists(string email)
         {
 
-            Context context = new Context();
-
-            using (context)
+            using (Context context = new Context())
             {
                 var v = context.Personnes.Where(a=>a.Email == email).FirstOrDefault();
                 return v != null;
             }
-
             
         }
 
-        
+        // Envoi l'email de vérification
         [NonAction]
         public void SendVerificationLinkEmail(string email, string activationCode, string emailFor = "VerificationCompte")
         {
@@ -346,8 +329,6 @@ namespace CVtheque.Web.Controllers
                 body = "<br/> Veuillez svp cliquer sur le lien ci-dessous afin de créer un nouveau mot de passe<br/><br/>" +
                     "<a href='" + link + "'>" + link + "</a>";
             }
-
-            
 
             var smtp = new SmtpClient //smtp = Simple Mail Transfer Protocol
             {
@@ -389,8 +370,7 @@ namespace CVtheque.Web.Controllers
             {
 
                 var pers =
-                    (
-                        from p in context.Personnes
+                    ( from p in context.Personnes
                         where p.Email == persOMDP.Email
                         select p).FirstOrDefault();
 
@@ -429,12 +409,10 @@ namespace CVtheque.Web.Controllers
         public ActionResult RemplacerMotDePasse(string id)
         {
 
-
             Guid guidActivationCode = new Guid(id);
 
             using (Context context = new Context())
             {
-
                 var pers =
                     (
                         from p in context.Personnes
@@ -474,7 +452,6 @@ namespace CVtheque.Web.Controllers
 
                     if (pers != null)
                     {
-
                         pers.Password = Crypto.Hash(persRMDP.Password);
                         pers.ActivationCode = Guid.Empty;
                         context.SaveChanges();
@@ -511,9 +488,8 @@ namespace CVtheque.Web.Controllers
         [Authorize]
         public ActionResult Profil()
         {
-            Context context = new Context();
 
-            using (context)
+            using (Context context = new Context())
             {
 
                 int userId = int.Parse(HttpContext.User.Identity.Name);
@@ -552,8 +528,6 @@ namespace CVtheque.Web.Controllers
             string fileName = "";
             Bitmap bmp;
             Graphics g;
-
-            //int cropX, cropY, cropW, cropH;
 
             if (ModelState.IsValid) //Despite its name, it doesn't actually know anything about any model classes. 
                                     //The ModelState represents a Enumerable of name and value pairs that were submitted to the server during a POST. 
@@ -664,9 +638,7 @@ namespace CVtheque.Web.Controllers
 
                 int userId = int.Parse(HttpContext.User.Identity.Name);
 
-                Context context = new Context();
-
-                using (context)
+                using (Context context = new Context())
                 {
 
                     var result = (from p in context.Personnes
