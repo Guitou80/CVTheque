@@ -12,9 +12,7 @@ function myAjaxRequest(myUrl, divTargetId, id) {
     $.ajax({
         type: "GET",
         url: myUrl + "?Id=" + id,
-        //data: myData,
         contentType: "application/json; charset=utf-8",
-        //dataType: "json",
         success: function (response) {
             $(divTargetId).html(response);
         },
@@ -51,7 +49,6 @@ $(document.body).on('click', '#form0 .fa-plus-square', function () {
 function ResetForm1(form) {
 
     $(form).attr('data-ajax-update', '#AffichageFormations');
-    //$(form).attr('method', 'post');
     $(form).find('span.action').text('Nouvelle formation');
     $(form).find('input[name=FormAction]').attr('value', 'AjoutTraitement');
     $(form).find('input.form-control:eq(2)').val('');
@@ -165,7 +162,6 @@ function clearAllDataHighlights() {
         $(this).css("background-color", "");
         $(btnElement).removeClass('fa-minus-square').addClass('fa-plus-square');
         $(btnElement).parents().eq(0).removeClass('black').addClass('green');
-
         
         formationsIds = [];
         competencesIds = [];
@@ -205,7 +201,6 @@ function SwitchDataHighlight(div, updateDataIdsArrays) {
                     break;
             }
         }
-        
 
     } else {
 
@@ -389,11 +384,20 @@ $(document.body).on('click', '#SubmitAddOrEditCV', function () {
             $('#AffichageCVs').html(result);
 
             if (FormAction == "AjoutTraitement") {
+
                 ResetCVForm1($('#CVform1'));
                 $('#DivAlert').html("<b>Un CV vient dêtre ajouté.</b>");
+                ClearCVLayout();
+
             } else {
+
+                // on veut que la variable global json cvData soit mise à jour, du coup on refait un appel ajax en get
+                ResetCVForm1($('#CVform1'));
+                myAjaxRequestEditCV1('/CV/AddOrEditCV', '#AffichageCVForm', cvData.Id);
                 $('#DivAlert').html("<b>Ce CV vient dêtre édité.</b>");
+                UpdateCVLayout(personneData, cvData);
                 //TODO : faire un fade out
+                // mettre le $('#DivAlert').html("<b>Ce CV vient dêtre édité.</b>") dans le "success: function(result)" dans myAjaxRequestEditCV1()
             }
 
             $('#DivAlert').addClass('alert alert-success');
@@ -462,14 +466,14 @@ $(document.body).on('click', '#CVform1 .fas', function () {
 
 });
 
+
 //__________________________________CV Layout_________________________________
 //____________________________________________________________________________
+
 
 function UpdateCVLayout(personne, cv) {
 
     //var data = {"Id":4,"Titre":"coucou","Layout":0,"MontrerPhoto":true,"Personne":null,"PersonneId":0,"Langues":[{"Id":2,"Label":"français","Niveau":3,"FormAction":"Ajout","FormTitre":"Nouvelle langue","CVs":null}],"Experiences":[{"Id":2,"DateDebut":"\/Date(1280700000000)\/","DateFin":"\/Date(1386889200000)\/","Entreprise":"Auto entrepreneur","Poste":"Webmestre","Description":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null},{"Id":3,"DateDebut":"\/Date(1438466400000)\/","DateFin":"\/Date(1544655600000)\/","Entreprise":"Profroid","Poste":"cariste","Description":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null}],"Formations":[{"Id":2,"DateDebut":"\/Date(1551481200000)\/","DateFin":"\/Date(1551740400000)\/","Ecole":"Leeds","Description":null,"Diplome":"Agrégation","FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null},{"Id":3,"DateDebut":"\/Date(1551481200000)\/","DateFin":"\/Date(1551740400000)\/","Ecole":"Princeton","Description":null,"Diplome":"these","FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null}],"Competences":[{"Id":2,"Label":"CSS3","Details":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null},{"Id":3,"Label":"bootstrap","Details":null,"FormAction":"Ajout","FormTitre":"Nouvelle formation","CVs":null}],"FormationsIds":null,"CompetencesIds":null,"LanguesIds":null,"ExperiencesIds":null,"FormAction":"EditionTraitement","FormTitre":"Edition de ce CV"};
-
- 
 
     if (cv.MontrerPhoto) {
         $('#CVPhotoCVLayout img').attr('src', '/Images/' + personne.Photo);
@@ -490,19 +494,133 @@ function UpdateCVLayout(personne, cv) {
         $('#PersonneCVLayout').find('span').eq(7).html("Pas de permis de conduire");
     }
 
-    var htmlTags1 = "<div class=\"row grid-striped\"><div class=\"col-4\">";
-    var htmlTags2 = "</div><div class=\"col-8\">";
+    //--------------------------------------experiences--------------------------------------------------
+
+    var htmlTags1 = "<div class=\"row grid-striped\" style=\"font-size:0.5em\"><div class=\"col-3\">";
+    var htmlTags2 = "</div><div class=\"col-9\">";
     var htmlTags3 = "</div></div>";
     var htmlExperiences = '';
+    var dateDebutMois;
+    var dateDebutAnnee;
+    var dateFinMois;
+    var dateFinAnnee;
 
     for (var i = 0; i < cv.Experiences.length; i++) {
-        htmlExperiences += htmlTags1 + cv.Experiences[i].DateDebut + "-" + cv.Experiences[i].DateFin + htmlTags2 + 
-            cv.Experiences[i].Entreprise + "<br/>" + cv.Experiences[i].Poste + "<br/>" + cv.Experiences[i].Description + htmlTags3;
+
+        dateDebutMois = getMonthAndYear(cv.Experiences[i].DateDebut).dateMois;
+        dateDebutAnnee = getMonthAndYear(cv.Experiences[i].DateDebut).dateAnnee;
+        dateFinMois = getMonthAndYear(cv.Experiences[i].DateFin).dateMois;
+        dateFinAnnee = getMonthAndYear(cv.Experiences[i].DateFin).dateAnnee;
+
+        htmlExperiences += htmlTags1 + dateDebutMois + " / " + dateDebutAnnee + " - " + dateFinMois + " / " + dateFinAnnee + htmlTags2 + "Entreprise : " +
+            cv.Experiences[i].Entreprise + "<br/> Poste : " + cv.Experiences[i].Poste + "<br/>";
+
+        if (cv.Experiences[i].Description != null) {
+            htmlExperiences += cv.Experiences[i].Description;
+        }
+
+        htmlExperiences += htmlTags3;
+            
     }
 
     $('#CVDataCVLayout').find('div').eq(0).html(htmlExperiences);
 
-    //debugger;
+    //--------------------------------------competences--------------------------------------------------
 
-    //
+    htmlTags1 = "<span style=\"font-size:0.5em\">";
+    htmlTags2 = "</span>";
+
+    var htmlCompetences = htmlTags1;
+
+    for (var i = 0; i < cv.Competences.length; i++) {
+        //TODO : rajouter "Details"
+        htmlCompetences += cv.Competences[i].Label + " - ";
+    }
+
+    htmlCompetences += htmlTags2;
+
+    $('#CVDataCVLayout').find('div').eq(0).siblings('div').eq(0).html(htmlCompetences);
+
+    //--------------------------------------formations--------------------------------------------------
+
+    htmlTags1 = "<div class=\"row grid-striped\" style=\"font-size:0.5em\"><div class=\"col-3\">";
+    htmlTags2 = "</div><div class=\"col-9\">";
+    htmlTags3 = "</div></div>";
+    var htmlFormations = '';
+    var dateDebutMois;
+    var dateDebutAnnee;
+    var dateFinMois;
+    var dateFinAnnee;
+
+    for (var i = 0; i < cv.Formations.length; i++) {
+
+        dateDebutMois = getMonthAndYear(cv.Formations[i].DateDebut).dateMois;
+        dateDebutAnnee = getMonthAndYear(cv.Formations[i].DateDebut).dateAnnee;
+        dateFinMois = getMonthAndYear(cv.Formations[i].DateFin).dateMois;
+        dateFinAnnee = getMonthAndYear(cv.Formations[i].DateFin).dateAnnee;
+
+        htmlFormations += htmlTags1 + dateDebutMois + " / " + dateDebutAnnee + " - " + dateFinMois + " / " + dateFinAnnee + htmlTags2 + "Ecole : " +
+            cv.Formations[i].Ecole + "<br/> Diplome : " + cv.Formations[i].Diplome + "<br/>";
+
+        if (cv.Formations[i].Description != null) {
+            htmlFormations += cv.Formations[i].Description;
+        }
+
+        htmlFormations += htmlTags3;
+
+    }
+
+    //$('#CVDataCVLayout').find('div').eq(0).html(htmlFormations);
+    $('#CVDataCVLayout').find('div').eq(0).siblings('div').eq(1).html(htmlFormations);
+
+    //--------------------------------------langues--------------------------------------------------
+
+    htmlTags1 = "<span style=\"font-size:0.5em\">";
+    htmlTags2 = "</span>";
+
+    var htmlLangues = "";
+
+    for (var i = 0; i < cv.Langues.length; i++) {
+        htmlLangues += htmlTags1 + cv.Langues[i].Label + " - Niveau : " + cv.Langues[i].Niveau + htmlTags2 + "<br/>" ;
+    }
+
+    $('#CVDataCVLayout').find('div').eq(0).siblings('div').eq(2).html(htmlLangues);
+
+}
+
+
+
+function ClearCVLayout() {
+
+    $('#CVPhotoCVLayout img').attr('src', '');
+
+    $('#CVTitreCVLayout').find('span').eq(0).html("");
+    $('#CVTitreCVLayout').find('span').eq(1).html("");
+
+    $('#PersonneCVLayout').find('span').eq(1).html("");
+    $('#PersonneCVLayout').find('span').eq(3).html("");
+    $('#PersonneCVLayout').find('span').eq(5).html("");
+
+    $('#PersonneCVLayout').find('span').eq(7).html("");
+
+    $('#CVDataCVLayout').find('div').eq(0).html("");
+    $('#CVDataCVLayout').find('div').eq(0).siblings('div').eq(0).html("");
+    $('#CVDataCVLayout').find('div').eq(0).siblings('div').eq(1).html("");
+    $('#CVDataCVLayout').find('div').eq(0).siblings('div').eq(2).html("");
+
+}
+
+
+function getMonthAndYear(maDate) {
+    
+    var date = new Date(parseInt(maDate.substr(6)));
+    var dateMois = parseInt(date.getMonth(), 10);
+    dateMois += 1;
+    var dateAnnee = parseInt(date.getYear(), 10) + 1900;
+
+    var returnedJson = { dateMois: dateMois, dateAnnee: dateAnnee };
+
+    return returnedJson;
+
+    
 }

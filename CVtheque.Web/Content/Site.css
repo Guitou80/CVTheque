@@ -44,7 +44,6 @@ main {
         grid-template-rows: repeat(5, auto);
     }
 
-
     #container main #AffichageCVForm {
         padding: 20px;
         background-color: #999999;

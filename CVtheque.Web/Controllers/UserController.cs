@@ -322,18 +322,32 @@ namespace CVtheque.Web.Controllers
 
         
         [NonAction]
-        public void SendVerificationLinkEmail(string email, string activationCode)
+        public void SendVerificationLinkEmail(string email, string activationCode, string emailFor = "VerificationCompte")
         {
 
-            var verifyUrl = "/User/VerificationCompte/" + activationCode;
+            var verifyUrl = "/User/" + emailFor + "/" + activationCode;
             var link = Request.Url.AbsoluteUri.Replace(Request.Url.PathAndQuery, verifyUrl);
 
             var fromEmail = new MailAddress("gferaud80@gmail.com", "CVTheque");
             var toEmail = new MailAddress(email);
             var fromEmailPassword = "66617061";
-            string subject = "Il vous faut activer votre compte";
-            string body = "<br/> Veuillez svp cliquer sur le lien ci-dessous afin de valider votre compte <br/><br/>" +
-                "<a href='" + link + "'>" + link + "</a>";
+            string subject = "";
+            string body = "";
+
+            if(emailFor == "VerificationCompte")
+            {
+                subject = "Il vous faut activer votre compte";
+                body = "<br/> Veuillez svp cliquer sur le lien ci-dessous afin de valider votre compte <br/><br/>" +
+                    "<a href='" + link + "'>" + link + "</a>";
+            }
+            else if(emailFor == "RemplacerMotDePasse")
+            {
+                subject = "Création d'un nouveau mot de passe";
+                body = "<br/> Veuillez svp cliquer sur le lien ci-dessous afin de créer un nouveau mot de passe<br/><br/>" +
+                    "<a href='" + link + "'>" + link + "</a>";
+            }
+
+            
 
             var smtp = new SmtpClient //smtp = Simple Mail Transfer Protocol
             {
@@ -355,7 +369,141 @@ namespace CVtheque.Web.Controllers
             })smtp.Send(message);
 
         }
+
+
+        //Mot de passe oublié ----------------------------
+
+        public ActionResult OubliMotDePasse()
+        {
+
+            return View();
+        }
+
+        [HttpPost] public ActionResult OubliMotDePasse(PersonneOubliMotDePasseVM persOMDP)
+        {
+
+            string message = "";
+            bool status = false;
+
+            using (Context context = new Context())
+            {
+
+                var pers =
+                    (
+                        from p in context.Personnes
+                        where p.Email == persOMDP.Email
+                        select p).FirstOrDefault();
+
+                if (pers != null)
+                {
+
+                    Guid resetCode = Guid.NewGuid();
+                    SendVerificationLinkEmail(persOMDP.Email, resetCode.ToString(), "RemplacerMotDePasse");
+                    pers.ActivationCode = resetCode;
+
+                    //pour éviter le problème de la confirmation de mot de passe
+                    context.Configuration.ValidateOnSaveEnabled = false;
+
+                    message = "Un email vient de vous être envoyé dans lequel est présent lien vous permettant d'activer le renouvellement de votre mot de passe."; ;
+                    status = true;
+
+                    context.SaveChanges();
+                }
+                else
+                {
+
+                    message = "Votre email ne correspond à aucun compte utilisateur.";
+                    status = false;
+
+                }
+            }
+
+            ViewBag.Message = message;
+            ViewBag.Status = status;
+
+            return View();
+        }
+
+
+        [HttpGet]
+        public ActionResult RemplacerMotDePasse(string id)
+        {
+
+
+            Guid guidActivationCode = new Guid(id);
+
+            using (Context context = new Context())
+            {
+
+                var pers =
+                    (
+                        from p in context.Personnes
+                        where p.ActivationCode == guidActivationCode
+                        select p).FirstOrDefault();
+
+                if (pers != null)
+                { 
+                    return View(new PersonneRemplacerMotDePasseVM { ActivationCode = guidActivationCode});
+                }
+                else
+                {
+                    return HttpNotFound();
+                }
+            }
+
+        }
+
         
+        [HttpPost]
+        public ActionResult RemplacerMotDePasse(PersonneRemplacerMotDePasseVM persRMDP)
+        {
+
+            string message = "";
+            bool status = false;
+
+            if (ModelState.IsValid){
+
+                using (Context context = new Context())
+                {
+
+                    var pers =
+                        (
+                            from p in context.Personnes
+                            where p.ActivationCode == persRMDP.ActivationCode
+                            select p).FirstOrDefault();
+
+                    if (pers != null)
+                    {
+
+                        pers.Password = Crypto.Hash(persRMDP.Password);
+                        pers.ActivationCode = Guid.Empty;
+                        context.SaveChanges();
+
+                        message = "Votre mot de passe a bien été remplacé. Vous pouvez à présent vous loguer";
+                        status = true;
+                    }
+                    else
+                    {
+                        message = "Votre mot de passe n'a pas été remplacé.";
+                        status = false;
+                    }
+                }
+
+            }
+            else
+            {
+                message = "ModelState non valide";
+                status = false;
+            }
+
+            ViewBag.Message = message;
+            ViewBag.Status = status;
+
+            return View();
+
+        }
+
+
         //--------------------------------------------------------
         // donnees et cvs ----------------------------------------
 

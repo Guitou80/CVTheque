@@ -8,8 +8,6 @@
 
     var cvData = @Html.Raw(Json.Encode(@Model));
 
-    //debugger;
-
 </script>
 
 
@@ -17,7 +15,7 @@
 
     @Html.AntiForgeryToken()
 
-    <span class="action">@Model.FormTitre - @Model.MontrerPhoto</span>
+    <span class="action">@Model.FormTitre</span>
 
     <div class="form-horizontal">
 

@@ -168,6 +168,8 @@
     <Compile Include="Models\DeleteFormationVM.cs" />
     <Compile Include="Models\FormationVM.cs" />
     <Compile Include="Models\LangueVM.cs" />
+    <Compile Include="Models\PersonneOubliMotDePasseVM.cs" />
+    <Compile Include="Models\PersonneRemplacerMotDePasseVM.cs" />
     <Compile Include="Models\PersonneEditionVM.cs" />
     <Compile Include="Models\PersonneVM.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -268,6 +270,8 @@
     <Content Include="Views\CV\CVLayout1.cshtml" />
     <Content Include="Views\CV\CVs.cshtml" />
     <Content Include="Views\CV\AddOrEditCV.cshtml" />
+    <Content Include="Views\User\OubliMotDePasse.cshtml" />
+    <Content Include="Views\User\RemplacerMotDePasse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

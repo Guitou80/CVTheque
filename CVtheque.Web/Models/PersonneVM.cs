@@ -55,12 +55,12 @@ namespace CVtheque.Web.Models
         public string Commune { get; set; }
 
         [Required(ErrorMessage = "Ce champ est requis")]
-        [StringLength(30)]
+        [StringLength(12, MinimumLength = 7)]
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Ce champ est requis")]
-        [StringLength(30)]
+        [StringLength(12, MinimumLength = 7)]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Ce champ ne correspond pas au champ \"mot de passe\".")]
         public string ConfirmPassword { get; set; }
