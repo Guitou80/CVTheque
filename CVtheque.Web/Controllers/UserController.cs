@@ -313,7 +313,7 @@ namespace CVtheque.Web.Controllers
 
             var fromEmail = new MailAddress("gferaud80@gmail.com", "CVTheque");
             var toEmail = new MailAddress(email);
-            var fromEmailPassword = "66617061";
+            var fromEmailPassword = "********"; //mettre ici son vrai mot de passe
             string subject = "";
             string body = "";
 
